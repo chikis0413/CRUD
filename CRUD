@@ -1,0 +1,131 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+struct Usuario {
+    string nombre;
+    int edad;
+};
+
+vector<Usuario> usuarios;
+
+void crearUsuario(string nombre, int edad) {
+    if (nombre.empty() || edad < 0) {
+        cout << "Por favor, ingresa un nuevo usuario, coloca su nombre y edad." << endl;
+        return;
+    }
+    usuarios.push_back({nombre, edad});
+    cout << "Usuario creado con exito." << endl;
+}
+
+void leerUsuarios() {
+    if (usuarios.empty()) {
+        cout << "No hay usuarios registrados." << endl;
+    } else {
+        for (size_t i = 0; i < usuarios.size(); i++) {
+            cout << (i + 1) << ". Nombre: " << usuarios[i].nombre << ", Edad: " << usuarios[i].edad << endl;
+        }
+    }
+}
+
+void actualizarUsuario(int indice, string nombre, int edad) {
+    if (indice >= 0 && indice < usuarios.size()) {
+        if (!nombre.empty()) usuarios[indice].nombre = nombre;
+        if (edad >= 0) usuarios[indice].edad = edad;
+        cout << "Usuario actualizado con exito." << endl;
+    } else {
+        cout << "Usuario no encontrado." << endl;
+    }
+}
+
+void eliminarUsuario(int indice) {
+    if (indice >= 0 && indice < usuarios.size()) {
+        cout << "Usuario eliminado: " << usuarios[indice].nombre << endl;
+        usuarios.erase(usuarios.begin() + indice);
+    } else {
+        cout << "Usuario no encontrado." << endl;
+    }
+}
+
+void menu() {
+    int opcion;
+    do {
+        system("cls"); 
+        cout << "\nMenu" << endl;
+        cout << "1. Crear usuario" << endl;
+        cout << "2. Leer usuarios" << endl;
+        cout << "3. Actualizar usuario" << endl;
+        cout << "4. Eliminar usuario" << endl;
+        cout << "5. Salir" << endl;
+
+        cout << "Selecciona una opcion: ";
+        cin >> opcion;
+
+        cin.ignore();
+
+        switch (opcion) {
+            case 1: {
+                string nombre;
+                int edad;
+                cout << "Ingrese el nombre: ";
+                getline(cin, nombre);
+                cout << "Ingrese la edad: ";
+                cin >> edad;
+                crearUsuario(nombre, edad);
+                system("pause"); 
+                break;
+            }
+            case 2:
+                leerUsuarios();
+                system("pause"); 
+                break;
+                
+            case 3: {
+                leerUsuarios();
+                int indiceActualizar;
+                cout << "Selecciona el numero de usuario para actualizar: ";
+                cin >> indiceActualizar;
+                cin.ignore(); 
+                indiceActualizar--; 
+                string nuevoNombre;
+                int nuevaEdad;
+                cout << "Nuevo nombre: ";
+                getline(cin, nuevoNombre);
+                cout << "Nueva edad: ";
+                cin >> nuevaEdad;
+                cin.ignore(); 
+                if (nuevoNombre.empty()) nuevoNombre = usuarios[indiceActualizar].nombre;
+                if (nuevaEdad == -1) nuevaEdad = usuarios[indiceActualizar].edad;
+                actualizarUsuario(indiceActualizar, nuevoNombre, nuevaEdad);
+                system("pause");
+                break;
+            }
+            case 4: {
+                leerUsuarios();
+                int indiceEliminar;
+                cout << "Selecciona el número de usuario para eliminar: ";
+                cin >> indiceEliminar;
+                cin.ignore();
+                indiceEliminar--;
+                eliminarUsuario(indiceEliminar);
+                system("pause"); 
+                break;
+            }
+            case 5:
+                cout << "Adios" << endl;
+                break;
+                
+            default:
+                cout << "Opcion invalida. Intenta nuevamente." << endl;
+                system("pause"); 
+                break;
+        }
+    } while (opcion != 5);
+}
+
+int main() {
+    menu();
+    return 0;
+}
